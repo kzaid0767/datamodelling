@@ -110,8 +110,50 @@ const createCourse = async () => {
     }
 }
 
-createCourse();
+//Blogpost schema and comment schema to model one to many relationship
+const blogPostSchema = new mongoose.Schema({
+    title: String,
+    content: String,
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+});
 
+const commentSchema = new mongoose.Schema({
+    content: String,
+    blogPost: { type: mongoose.Schema.Types.ObjectId, ref: "BlogPost" },
+});
+
+const Comment = mongoose.model("Comment", commentSchema);
+const BlogPost = mongoose.model("BlogPost", blogPostSchema);
+
+const createBlogPost = async () => {
+    try {
+        const blogPost = await BlogPost.create({
+            title: "My Blog Post",
+            content: "This is my blog post.",
+            
+        });
+        console.log(blogPost);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const createComment = async () => {
+    //1.find blogpost
+    const blogPost = await BlogPost.findById('677929d6497f96ceb58f3f9c');
+    //2.create comment
+    const comment = await Comment.create({
+        content: "This is a socond comment.",
+        blogPost: blogPost._id,
+    })
+    //3.add comment to blogpost
+    blogPost.comments.push(comment._id);
+    //4.save blogpost
+    await blogPost.save();
+    console.log(comment);
+}
+
+createComment();
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
