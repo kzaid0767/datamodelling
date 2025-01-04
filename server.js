@@ -153,7 +153,61 @@ const createComment = async () => {
     console.log(comment);
 }
 
-createComment();
+//Many to many relationship team and sponsors
+const teamSchema = new mongoose.Schema({
+    name: String,
+    sponsors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sponsor" }],
+});
+
+const sponsorSchema = new mongoose.Schema({
+    name: String,
+    teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
+});
+
+const Team = mongoose.model("Team", teamSchema);
+const Sponsor = mongoose.model("Sponsor", sponsorSchema);
+
+const createTeam = async () => {
+    try {
+        const team = await Team.create({
+            name: "Simba SC",
+        });
+        console.log(team);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const createSponsor = async () => {
+    const team = await Team.findById('677933f7b44f08bf23a0de0f');
+    const sponsor = await Sponsor.create({
+        name: "Nike",
+        teams: [team._id],
+    })
+    team.sponsors.push(sponsor._id);
+    await team.save();
+    console.log(sponsor);
+}
+
+const addSponsorToTeam = async () => {
+    const team = await Team.findById('677933f7b44f08bf23a0de0f');
+    const sponsor = await Sponsor.findById('67793603faf8ed96669b1d5b');
+    team.sponsors.push(sponsor._id);
+    await team.save();
+    console.log(team);
+}
+
+
+
+const addTeamToSponsor = async () => {
+    const team = await Team.findById('677933c659ad5d80c0da9559');
+    const sponsor = await Sponsor.findById('6779367cb88b868473a1e461');
+    sponsor.teams.push(team._id);
+    await sponsor.save();
+    console.log(sponsor);
+}
+
+addTeamToSponsor()
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
