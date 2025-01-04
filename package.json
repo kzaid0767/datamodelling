@@ -4,13 +4,24 @@
   "description": "mongoose with data modelling",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kzaid0767/data-modelling.git"
+  },
+  "type": "module",  
   "keywords": [
     "mongoose",
     "data",
     "modelling"
   ],
   "author": "Kassim Zaid",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.3"
+  }
 }
