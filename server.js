@@ -110,7 +110,15 @@ const createCourse = async () => {
     }
 }
 
+createCourse();
+
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
+
+/* 
+1. one to one relationship - can be by using embedded document or referencing
+2. one to many relationship
+3. many to many relationship
+*/
